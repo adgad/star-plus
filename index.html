@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	 <meta name="viewport" content="width=device-width">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style>
+		body {
+			font-family: Helvetica, Arial, sans-serif;
+			background-color: #efefef;
+		}
+		#c {
+			width: 100%;
+	    image-rendering: optimizeQuality;
+	    image-rendering: -moz-crisp-edges;
+	    image-rendering: -webkit-optimize-contrast;
+	    image-rendering: optimize-contrast;
+	    -ms-interpolation-mode: nearest-neighbor;
+		}
+		#z {
+			width: 100%;
+		}
+		#imageLoader,
+		button {
+	    font-family: inherit;
+	    font-size: 100%;
+	    padding: .5em 1em;
+	    color: #444;
+	    color: rgba(0,0,0,.8);
+	    border: 1px solid #999;
+	    border: transparent;
+	    background-color: #E6E6E6;
+	    text-decoration: none;
+	    border-radius: 2px;
+	    margin-bottom: 8px;
+		}
+		button:hover {
+			background-color: #fecd5d;
+		}
+		</style>
+</head>
+<body>
+
+<ol>
+<li>Upload a file</li>
+<li>Click on the faces</li>
+<li>Start</li>
+</ol>
+<input type="file" id="imageLoader" name="imageLoader"/>
+
+<button onclick="start()">Start</button>
+<button onclick="stop()">Stop</button>
+<canvas id="c"></canvas>
+<audio id="a" src="dramatic.mp3"/>
+
+<script>
+var img = new Image();
+
+var canvas = document.getElementById('c');
+var audio = document.getElementById('a');
+var imageLoader = document.getElementById('imageLoader');
+    imageLoader.addEventListener('change', handleImage, false);
+var ctx = canvas.getContext('2d');
+var isStopped = true;
+var pointsToZoom = [];
+
+function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+        img.onload = function(){
+            init(img);
+        }
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);     
+}
+
+function drawImage() {
+	 ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
+                   0, 0, canvas.width, canvas.height);
+}
+
+function stop() {
+	isStopped = true;
+	ctx.restore();
+	a.pause();
+	a.currentTime = 0;
+}
+
+function addPoint(e) {
+	ctx.strokeText("x",e.layerX,e.layerY);
+	pointsToZoom.push({
+		x: e.layerX,
+		y: e.layerY
+	});
+}
+
+function init(img) {
+	canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight / img.width * img.height;
+ 
+  img.style.display = 'none';
+
+  canvas.addEventListener('click', addPoint)
+
+  drawImage();
+}
+
+function start(img) {
+	isStopped = false;
+	a.play();
+
+	if(pointsToZoom.length < 10) {
+		for(var i = pointsToZoom.length; i<10; i++) {
+			pointsToZoom.push({
+				x: Math.random() * canvas.width,
+				y: Math.random() * canvas.height
+			});
+		}
+	}
+	
+	var zConf = pointsToZoom.map(pt => ({
+		start: pt,
+		maxIterations: (Math.random() * 150) + 100,
+		factor: (Math.random() * 0.02) + 1.005
+	}));
+
+  zoom(zConf[0])
+  .then(() => {
+  	return filter('brightness(10)', 100);
+  })
+  .then(() => { 
+	  return zoom(zConf[1]);
+  })
+  .then(() => {
+  	
+  	filter('hue-rotate(50deg)', 400);
+  	return zoom(zConf[2]);
+  })
+  .then(() => {
+  	filter('hue-rotate(-50deg)', 400);
+	  return zoom(zConf[3]);
+  })
+  .then(() => { 
+	  return zoom(zConf[4]);
+  })
+  .then(() => {
+  	return filter('invert(100%)', 300);
+  	return zoom(zConf[5]);
+  })
+  .then(() => {
+  	filter('hue-rotate(20deg)', 400);
+	  return zoom(zConf[6]);
+  })
+  .then(() => { 
+  	filter('brightness(1.2)', 400);
+	  return zoom(zConf[7]);
+  })
+  .then(() => {
+  	return filter('invert(100%);blur(2px)', 2000);
+  })
+  .then(() => { 
+	  return zoom(zConf[8]);
+  })
+  .then(stop)
+}
+
+
+function zoom(opts, iterations) {
+  ctx.save();
+	iterations = iterations || 0;
+  var doZoom = function () {
+  	if(isStopped) return;
+		return new Promise(function(resolve, reject) {
+				  ctx.translate(opts.start.x,opts.start.y);
+				  if(iterations++ < opts.maxIterations / 2) {
+				  	ctx.scale(opts.factor, opts.factor);
+				  } else if (iterations < opts.maxIterations) {
+				  	ctx.scale(1/opts.factor,1/opts.factor);
+				  } else {
+				  	ctx.restore();
+				  	return resolve('asda');
+				  }
+				  
+				  ctx.translate(-opts.start.x,-opts.start.y);
+				  drawImage();
+				  requestAnimationFrame(function() {
+				  	resolve(doZoom(opts, iterations));
+				  });
+				})
+  }
+
+  return Promise.resolve(doZoom());
+	
+}
+
+function filter(effect, duration) {
+	if(isStopped) return;
+
+	return new Promise(function(resolve, reject ) {
+		ctx.filter = effect;
+		drawImage();
+		setTimeout(function() {
+			ctx.filter = 'none';
+			drawImage();
+			return resolve();
+		}, duration)
+	})
+}
+
+
+
+</script>
+</body>
+</html>
