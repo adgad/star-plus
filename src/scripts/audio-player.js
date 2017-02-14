@@ -15,8 +15,8 @@ class AudioPlayer {
 		this.stream = dest.stream;
 		// connect our audio element's output to the stream
 		const sourceNode = this.ctx.createMediaElementSource(this.audio);
-		sourceNode.connect(dest);
 		sourceNode.connect(this.ctx.destination);
+		sourceNode.connect(dest);
 
 		this.audio.oncanplay = null;
 
