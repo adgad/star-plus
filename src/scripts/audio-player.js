@@ -1,10 +1,11 @@
 
 class AudioPlayer {
 
-	constructor(el) {
-		this.el = el;
+	constructor() {
+		this.audio = new Audio();
+		this.audio.src = 'dramatic.mp3';
 		this.ctx = new AudioContext();
-		this.el.oncanplay = this.setUpStream.bind(this);
+		this.audio.oncanplay = this.setUpStream.bind(this);
 		this.stream = null;
 	}
 
@@ -13,11 +14,11 @@ class AudioPlayer {
 		const dest = this.ctx.createMediaStreamDestination();
 		this.stream = dest.stream;
 		// connect our audio element's output to the stream
-		const sourceNode = this.ctx.createMediaElementSource(this.el);
+		const sourceNode = this.ctx.createMediaElementSource(this.audio);
 		sourceNode.connect(dest);
 		sourceNode.connect(this.ctx.destination);
 
-		this.el.oncanplay = null;
+		this.audio.oncanplay = null;
 
 	}
 
@@ -26,12 +27,12 @@ class AudioPlayer {
 	}
 
 	start() {
-		this.el.play();
+		this.audio.play();
 	}
 
 	stop() {
-		this.el.pause();
-		this.el.currentTime = 0;
+		this.audio.pause();
+		this.audio.currentTime = 0;
 	}
 }
 
