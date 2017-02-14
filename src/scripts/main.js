@@ -13,7 +13,7 @@ const init = () => {
 
 	const spCanvas = new StarPlusCanvas(canvasEl);
 	const audioPlayer = new AudioPlayer(audioEl);
-	const recorder = new Recorder(spCanvas.stream);
+	const recorder = new Recorder(spCanvas.stream, audioPlayer);
 
 	imageLoader(imageLoaderEl, spCanvas.init.bind(spCanvas));
 

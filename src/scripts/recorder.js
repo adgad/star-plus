@@ -1,32 +1,29 @@
 /*globals MediaRecorder */
 class Recorder {
 
-	constructor(stream) {
+	constructor(stream, audioPlayer) {
 		this.stream = stream;
 		this.mediaSource = new MediaSource();
 		this.mediaRecorder = null;
 		this.recordedBlobs = [];
 		this.sourceBuffer = null;
+		this.audioPlayer = audioPlayer;
 	}
 
 	start() {
-		const options = { mimeType: 'video/webm' };
 		//reset the recorded blobs
 		this.recordedBlobs = [];
+		this.stream.addTrack(this.audioPlayer.track);
+
 
 		try {
-			this.mediaRecorder = new MediaRecorder(this.stream, options);
-		} catch (e0) {
-			console.log('Unable to create MediaRecorder with options Object: ', e0);
-			//if it fails, try another codec
-			try {
-				options.mimeType = 'video/webm,codecs=vp9';
-				this.mediaRecorder = new MediaRecorder(this.stream, options);
-			} catch (e1) {
-				console.log('MediaRecorder is not supported by this browser');
-				return;
-			}
-			
+			var mixedStream = 'MediaStream' in window ? 
+			new MediaStream([this.stream.getVideoTracks()[0], this.audioPlayer.track]) :
+			this.stream;
+			this.mediaRecorder = new MediaRecorder(mixedStream);
+		} catch (e) {		
+			console.log('MediaRecorder is not supported by this browser', e);
+			return;
 		}
 
 		//store the data whenever the mediarecorder gives us something
@@ -47,7 +44,7 @@ class Recorder {
 	}
 
 	download() {
-		const blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
+		const blob = new Blob(this.recordedBlobs);
 		const url = window.URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.style.display = 'none';
