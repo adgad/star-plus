@@ -12,7 +12,7 @@
 			background-color: #efefef;
 		}
 		#c {
-			width: 100%;
+			display: block;
 	    image-rendering: optimizeQuality;
 	    image-rendering: -moz-crisp-edges;
 	    image-rendering: -webkit-optimize-contrast;
@@ -98,8 +98,8 @@ function addPoint(e) {
 }
 
 function init(img) {
-	canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight / img.width * img.height;
+	canvas.width = Math.min(window.innerWidth, 600);
+  canvas.height = canvas.width / img.width * img.height;
  
   img.style.display = 'none';
 
@@ -121,47 +121,49 @@ function start(img) {
 		}
 	}
 	
-	var zConf = pointsToZoom.map(pt => ({
+	var zConf = pointsToZoom.map(function(pt) {
+		return {
 		start: pt,
 		maxIterations: (Math.random() * 150) + 100,
 		factor: (Math.random() * 0.02) + 1.005
-	}));
+		}
+	});
 
   zoom(zConf[0])
-  .then(() => {
+  .then(function() {
   	return filter('brightness(10)', 100);
   })
-  .then(() => { 
+  .then(function() {
 	  return zoom(zConf[1]);
   })
-  .then(() => {
+  .then(function() {
   	
   	filter('hue-rotate(50deg)', 400);
   	return zoom(zConf[2]);
   })
-  .then(() => {
+  .then(function() {
   	filter('hue-rotate(-50deg)', 400);
 	  return zoom(zConf[3]);
   })
-  .then(() => { 
+  .then(function() {
 	  return zoom(zConf[4]);
   })
-  .then(() => {
+  .then(function() {
   	return filter('invert(100%)', 300);
   	return zoom(zConf[5]);
   })
-  .then(() => {
+  .then(function() {
   	filter('hue-rotate(20deg)', 400);
 	  return zoom(zConf[6]);
   })
-  .then(() => { 
+  .then(function() {
   	filter('brightness(1.2)', 400);
 	  return zoom(zConf[7]);
   })
-  .then(() => {
+  .then(function() {
   	return filter('invert(100%);blur(2px)', 2000);
   })
-  .then(() => { 
+  .then(function() {
 	  return zoom(zConf[8]);
   })
   .then(stop)
