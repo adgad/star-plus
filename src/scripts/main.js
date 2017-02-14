@@ -10,6 +10,7 @@ const init = () => {
 	const imageLoaderEl =  document.getElementById('imageLoader');
 	const startBtn = document.getElementById('start');
 	const stopBtn = document.getElementById('stop');
+	const downloadBtn = document.getElementById('download');
 
 	const spCanvas = new StarPlusCanvas(canvasEl);
 	const audioPlayer = new AudioPlayer(audioEl);
@@ -21,11 +22,17 @@ const init = () => {
 		spCanvas.start();
 		audioPlayer.start();
 		recorder.start();
+		downloadBtn.classList.remove('show');
+
 	});
 	stopBtn.addEventListener('click', () => {
 		spCanvas.stop();
 		audioPlayer.stop();
 		recorder.stop();
+		downloadBtn.classList.add('show');
+	});
+
+	downloadBtn.addEventListener('click', () => {
 		recorder.download();
 	});
 };
