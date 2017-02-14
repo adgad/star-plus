@@ -135,12 +135,13 @@ class StarPlusCanvas {
 				this.ctx.lineWidth = 2;
 				this.ctx.strokeStyle = 'red';
 				for(let face of faces) {
-					this.ctx.rect(Math.floor(face.x * scale),
-						Math.floor(face.y * scale),
-						Math.floor(face.width * scale),
-						Math.floor(face.height * scale));
+					const box = face.boundingBox;
+					this.ctx.rect(Math.floor(box.x * scale),
+						Math.floor(box.y * scale),
+						Math.floor(box.width * scale),
+						Math.floor(box.height * scale));
 					this.ctx.stroke();
-					this.focalPoints.push(face);
+					this.focalPoints.push(box);
 				}
 			})
 		.catch((e) => {
