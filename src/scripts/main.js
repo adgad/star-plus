@@ -17,19 +17,22 @@ const init = () => {
 
 	imageLoader(imageLoaderEl, spCanvas.init.bind(spCanvas));
 
-	startBtn.addEventListener('click', () => {
-		spCanvas.start();
-		audioPlayer.start();
-		recorder.start();
-		downloadBtn.classList.remove('show');
-
-	});
-	stopBtn.addEventListener('click', () => {
+	const stop = () => {
 		spCanvas.stop();
 		audioPlayer.stop();
 		recorder.stop();
 		downloadBtn.classList.add('show');
+	};
+	
+	startBtn.addEventListener('click', () => {
+		spCanvas.start().then(stop);
+		audioPlayer.start();
+		recorder.start();
+		downloadBtn.classList.remove('show');
 	});
+
+
+	stopBtn.addEventListener('click', stop);
 
 	downloadBtn.addEventListener('click', () => {
 		recorder.download();

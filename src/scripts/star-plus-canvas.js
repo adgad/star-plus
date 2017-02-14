@@ -59,7 +59,7 @@ class StarPlusCanvas {
 			factor: (Math.random() * 0.02) + 1.005
 		}));
 
-		this.zoom(zConf[0])
+		return this.zoom(zConf[0])
 			.then(() => this.filter('brightness(10)', 100))
 			.then(() => this.zoom(zConf[1]))
 			.then(() => {
@@ -141,7 +141,10 @@ class StarPlusCanvas {
 						Math.floor(box.width * scale),
 						Math.floor(box.height * scale));
 					this.ctx.stroke();
-					this.focalPoints.push(box);
+					this.focalPoints.push({
+						x: box.x * scale,
+						y: box.y * scale
+					});
 				}
 			})
 		.catch((e) => {
