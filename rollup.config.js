@@ -8,11 +8,11 @@ export default {
   format: 'iife',
   sourceMap: 'inline',
 	plugins: [
-		// eslint({
-		// 	exclude: [
-		// 		'src/styles/**',
-		// 	]
-		// }),
+		eslint({
+			exclude: [
+				'src/styles/**',
+			]
+		}),
 		babel({
       exclude: 'node_modules/**'
     })

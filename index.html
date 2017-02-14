@@ -58,49 +58,11 @@
     <video id="recorded" autoplay loop></video>
 <script src="build/js/main.min.js"/>
 <script>
-// var img = new Image();
-
-// var canvas = document.getElementById('c');
-// var audio = document.getElementById('a');
-// var imageLoader = document.getElementById('imageLoader');
-//     imageLoader.addEventListener('change', handleImage, false);
-// var ctx = canvas.getContext('2d');
-// var isStopped = true;
-// var pointsToZoom = [];
-
-
-
 
 // var mediaSource = new MediaSource();
 // var mediaRecorder;
 // var recordedBlobs;
 // var sourceBuffer;
-
-// function handleImage(e){
-//     var reader = new FileReader();
-//     reader.onload = function(event){
-//         img.onload = function(){
-//             init(img);
-//         }
-//         img.src = event.target.result;
-//     }
-//     reader.readAsDataURL(e.target.files[0]);     
-// }
-
-// function drawImage() {
-
-// }
-
-// function stop() {
-// 	isStopped = true;
-// 	ctx.restore();
-// 	stopRecording();
-// 	download();
-// 	a.pause();
-// 	a.currentTime = 0;
-// }
-
-
 
 
 
@@ -108,92 +70,6 @@
 	
 
   
-//   drawImage();
-// }
-
-// function start(img) {
-// 	isStopped = false;
-// 	a.play();
-// 	startRecording();
-
-// 	if(pointsToZoom.length < 10) {
-// 		for(var i = pointsToZoom.length; i<10; i++) {
-// 			pointsToZoom.push({
-// 				x: Math.random() * canvas.width,
-// 				y: Math.random() * canvas.height
-// 			});
-// 		}
-// 	}
-	
-// 	var zConf = pointsToZoom.map(function(pt) {
-// 		return {
-// 		start: pt,
-// 		maxIterations: (Math.random() * 150) + 100,
-// 		factor: (Math.random() * 0.02) + 1.005
-// 		}
-// 	});
-
-//   zoom(zConf[0])
-//   .then(function() {
-//   	return filter('brightness(10)', 100);
-//   })
-//   .then(function() {
-// 	  return zoom(zConf[1]);
-//   })
-//   .then(function() {
-  	
-//   	filter('hue-rotate(50deg)', 400);
-//   	return zoom(zConf[2]);
-//   })
-//   .then(function() {
-//   	filter('hue-rotate(-50deg)', 400);
-// 	  return zoom(zConf[3]);
-//   })
-//   .then(function() {
-// 	  return zoom(zConf[4]);
-//   })
-//   .then(function() {
-//   	return filter('invert(100%)', 300);
-//   	return zoom(zConf[5]);
-//   })
-//   .then(function() {
-//   	filter('hue-rotate(20deg)', 400);
-// 	  return zoom(zConf[6]);
-//   })
-//   .then(function() {
-//   	filter('brightness(1.2)', 400);
-// 	  return zoom(zConf[7]);
-//   })
-//   .then(function() {
-//   	return filter('invert(100%);blur(2px)', 2000);
-//   })
-//   .then(function() {
-// 	  return zoom(zConf[8]);
-//   })
-//   .then(function() {
-//   	filter('hue-rotate(120deg)', 400);
-// 	  return zoom(zConf[9]);
-//   })
-//   .then(stop)
-// }
-
-
-
-
-function filter(effect, duration) {
-	if(isStopped) return;
-
-	return new Promise(function(resolve, reject ) {
-		ctx.filter = effect;
-		drawImage();
-		setTimeout(function() {
-			ctx.filter = 'none';
-			drawImage();
-			return resolve();
-		}, duration)
-	})
-}
-
 // // The nested try blocks will be simplified when Chrome 47 moves to Stable
 // function startRecording() {
 //   var options = {mimeType: 'video/webm'};
