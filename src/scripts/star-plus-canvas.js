@@ -75,7 +75,7 @@ class StarPlusCanvas {
 			})
 			.then(() => this.filter('invert(100%);blur(2px)', 2000))
 			.then(() => this.zoom(zConf[8]))
-			.then(function() {
+			.then(() => {
 				this.filter('hue-rotate(120deg)', 400);
 				return this.zoom(zConf[9]);
 			})
@@ -85,13 +85,6 @@ class StarPlusCanvas {
 		this.isPlaying = false;
 		this.ctx.restore();
 	}
-// 	isStopped = true;
-// 	ctx.restore();
-// 	stopRecording();
-// 	download();
-// 	a.pause();
-// 	a.currentTime = 0;
-// }
 
 	zoom (opts, iterations) {
 		this.ctx.save();
