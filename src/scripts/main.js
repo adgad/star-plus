@@ -6,14 +6,13 @@ import imageLoader from './image-loader';
 const init = () => {
 
 	const canvasEl = document.getElementById('c');
-	const audioEl = document.getElementById('a');
 	const imageLoaderEl =  document.getElementById('imageLoader');
 	const startBtn = document.getElementById('start');
 	const stopBtn = document.getElementById('stop');
 	const downloadBtn = document.getElementById('download');
 
 	const spCanvas = new StarPlusCanvas(canvasEl);
-	const audioPlayer = new AudioPlayer(audioEl);
+	const audioPlayer = new AudioPlayer();
 	const recorder = new Recorder(spCanvas.stream, audioPlayer);
 
 	imageLoader(imageLoaderEl, spCanvas.init.bind(spCanvas));

@@ -1,3 +1,4 @@
+/* globals FaceDetector */
 import getOffset from './utils/get-offset';
 
 class StarPlusCanvas {
@@ -5,12 +6,12 @@ class StarPlusCanvas {
 	constructor (el) {
 		this.canvas = el;
 		this.ctx = this.canvas.getContext('2d');
-		this.focalPoints = [];
-		this.isPlaying = false;
 		this.img = null;
 	}
 
 	init(img) {
+		this.focalPoints = [];
+		this.isPlaying = false;
 		this.canvas.width = Math.min(window.innerWidth, 600);
 		this.canvas.height = this.canvas.width / img.width * img.height;
  
@@ -20,6 +21,8 @@ class StarPlusCanvas {
 		this.canvas.addEventListener('click', this.addPoint.bind(this));
 
 		this.drawImage(img);
+
+		this.detectFaces();
 	}
 
 	addPoint(e) {
@@ -116,6 +119,33 @@ class StarPlusCanvas {
 
 		return Promise.resolve(doZoom());
 		
+	}
+
+	detectFaces() {
+		if (window.FaceDetector == undefined) {
+			console.error('Face Detection not supported');
+			return;
+		}
+
+		const faceDetector = new FaceDetector();
+		const scale = this.canvas.width / this.img.width;
+		faceDetector.detect(this.img)
+			.then(faces => {
+			// Draw the faces on the <canvas>.
+				this.ctx.lineWidth = 2;
+				this.ctx.strokeStyle = 'red';
+				for(let face of faces) {
+					this.ctx.rect(Math.floor(face.x * scale),
+						Math.floor(face.y * scale),
+						Math.floor(face.width * scale),
+						Math.floor(face.height * scale));
+					this.ctx.stroke();
+					this.focalPoints.push(face);
+				}
+			})
+		.catch((e) => {
+			console.error('Boo, Face Detection failed: ' + e);
+		});
 	}
 
 	filter(effect, duration) {
