@@ -50,172 +50,135 @@
 </ol>
 <input type="file" id="imageLoader" name="imageLoader" accept="image/*"/>
 
-<button onclick="start()">Start</button>
-<button onclick="stop()">Stop</button>
+<button id="start">Start</button>
+<button id="stop">Stop</button>
 <canvas id="c"></canvas>
-<audio id="a" src="dramatic.mp3"/>
+<audio id="a" src="dramatic.mp3"></audio>
 
+    <video id="recorded" autoplay loop></video>
+<script src="build/js/main.min.js"/>
 <script>
-var img = new Image();
+// var img = new Image();
 
-var canvas = document.getElementById('c');
-var audio = document.getElementById('a');
-var imageLoader = document.getElementById('imageLoader');
-    imageLoader.addEventListener('change', handleImage, false);
-var ctx = canvas.getContext('2d');
-var isStopped = true;
-var pointsToZoom = [];
+// var canvas = document.getElementById('c');
+// var audio = document.getElementById('a');
+// var imageLoader = document.getElementById('imageLoader');
+//     imageLoader.addEventListener('change', handleImage, false);
+// var ctx = canvas.getContext('2d');
+// var isStopped = true;
+// var pointsToZoom = [];
 
-function handleImage(e){
-    var reader = new FileReader();
-    reader.onload = function(event){
-        img.onload = function(){
-            init(img);
-        }
-        img.src = event.target.result;
-    }
-    reader.readAsDataURL(e.target.files[0]);     
-}
 
-function drawImage() {
-	 ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
-                   0, 0, canvas.width, canvas.height);
-}
 
-function stop() {
-	isStopped = true;
-	ctx.restore();
-	a.pause();
-	a.currentTime = 0;
-}
 
-function getOffset(evt) {
-  var el = evt.target,
-      x = 0,
-      y = 0;
+// var mediaSource = new MediaSource();
+// var mediaRecorder;
+// var recordedBlobs;
+// var sourceBuffer;
 
-  while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
-    x += el.offsetLeft - el.scrollLeft;
-    y += el.offsetTop - el.scrollTop;
-    el = el.offsetParent;
-  }
+// function handleImage(e){
+//     var reader = new FileReader();
+//     reader.onload = function(event){
+//         img.onload = function(){
+//             init(img);
+//         }
+//         img.src = event.target.result;
+//     }
+//     reader.readAsDataURL(e.target.files[0]);     
+// }
 
-  x = evt.clientX - x;
-  y = evt.clientY - y;
+// function drawImage() {
 
-  return { x: x, y: y };
-};
+// }
 
-var x = getOffset( document.getElementById('yourElId') ).left; 
-function addPoint(e) {
-	ctx.strokeText("x",e.layerX,e.layerY);
-	pointsToZoom.push(getOffset(e));
-}
+// function stop() {
+// 	isStopped = true;
+// 	ctx.restore();
+// 	stopRecording();
+// 	download();
+// 	a.pause();
+// 	a.currentTime = 0;
+// }
 
-function init(img) {
-	canvas.width = Math.min(window.innerWidth, 600);
-  canvas.height = canvas.width / img.width * img.height;
- 
-  img.style.display = 'none';
 
-  canvas.addEventListener('click', addPoint)
 
-  drawImage();
-}
 
-function start(img) {
-	isStopped = false;
-	a.play();
 
-	if(pointsToZoom.length < 10) {
-		for(var i = pointsToZoom.length; i<10; i++) {
-			pointsToZoom.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height
-			});
-		}
-	}
+// function init(img) {
 	
-	var zConf = pointsToZoom.map(function(pt) {
-		return {
-		start: pt,
-		maxIterations: (Math.random() * 150) + 100,
-		factor: (Math.random() * 0.02) + 1.005
-		}
-	});
 
-  zoom(zConf[0])
-  .then(function() {
-  	return filter('brightness(10)', 100);
-  })
-  .then(function() {
-	  return zoom(zConf[1]);
-  })
-  .then(function() {
+  
+//   drawImage();
+// }
+
+// function start(img) {
+// 	isStopped = false;
+// 	a.play();
+// 	startRecording();
+
+// 	if(pointsToZoom.length < 10) {
+// 		for(var i = pointsToZoom.length; i<10; i++) {
+// 			pointsToZoom.push({
+// 				x: Math.random() * canvas.width,
+// 				y: Math.random() * canvas.height
+// 			});
+// 		}
+// 	}
+	
+// 	var zConf = pointsToZoom.map(function(pt) {
+// 		return {
+// 		start: pt,
+// 		maxIterations: (Math.random() * 150) + 100,
+// 		factor: (Math.random() * 0.02) + 1.005
+// 		}
+// 	});
+
+//   zoom(zConf[0])
+//   .then(function() {
+//   	return filter('brightness(10)', 100);
+//   })
+//   .then(function() {
+// 	  return zoom(zConf[1]);
+//   })
+//   .then(function() {
   	
-  	filter('hue-rotate(50deg)', 400);
-  	return zoom(zConf[2]);
-  })
-  .then(function() {
-  	filter('hue-rotate(-50deg)', 400);
-	  return zoom(zConf[3]);
-  })
-  .then(function() {
-	  return zoom(zConf[4]);
-  })
-  .then(function() {
-  	return filter('invert(100%)', 300);
-  	return zoom(zConf[5]);
-  })
-  .then(function() {
-  	filter('hue-rotate(20deg)', 400);
-	  return zoom(zConf[6]);
-  })
-  .then(function() {
-  	filter('brightness(1.2)', 400);
-	  return zoom(zConf[7]);
-  })
-  .then(function() {
-  	return filter('invert(100%);blur(2px)', 2000);
-  })
-  .then(function() {
-	  return zoom(zConf[8]);
-  })
-  .then(function() {
-  	filter('hue-rotate(120deg)', 400);
-	  return zoom(zConf[9]);
-  })
-  .then(stop)
-}
+//   	filter('hue-rotate(50deg)', 400);
+//   	return zoom(zConf[2]);
+//   })
+//   .then(function() {
+//   	filter('hue-rotate(-50deg)', 400);
+// 	  return zoom(zConf[3]);
+//   })
+//   .then(function() {
+// 	  return zoom(zConf[4]);
+//   })
+//   .then(function() {
+//   	return filter('invert(100%)', 300);
+//   	return zoom(zConf[5]);
+//   })
+//   .then(function() {
+//   	filter('hue-rotate(20deg)', 400);
+// 	  return zoom(zConf[6]);
+//   })
+//   .then(function() {
+//   	filter('brightness(1.2)', 400);
+// 	  return zoom(zConf[7]);
+//   })
+//   .then(function() {
+//   	return filter('invert(100%);blur(2px)', 2000);
+//   })
+//   .then(function() {
+// 	  return zoom(zConf[8]);
+//   })
+//   .then(function() {
+//   	filter('hue-rotate(120deg)', 400);
+// 	  return zoom(zConf[9]);
+//   })
+//   .then(stop)
+// }
 
 
-function zoom(opts, iterations) {
-  ctx.save();
-	iterations = iterations || 0;
-  var doZoom = function () {
-  	if(isStopped) return;
-		return new Promise(function(resolve, reject) {
-				  ctx.translate(opts.start.x,opts.start.y);
-				  if(iterations++ < opts.maxIterations / 2) {
-				  	ctx.scale(opts.factor, opts.factor);
-				  } else if (iterations < opts.maxIterations) {
-				  	ctx.scale(1/opts.factor,1/opts.factor);
-				  } else {
-				  	ctx.restore();
-				  	return resolve('asda');
-				  }
-				  
-				  ctx.translate(-opts.start.x,-opts.start.y);
-				  drawImage();
-				  requestAnimationFrame(function() {
-				  	resolve(doZoom(opts, iterations));
-				  });
-				})
-  }
 
-  return Promise.resolve(doZoom());
-	
-}
 
 function filter(effect, duration) {
 	if(isStopped) return;
@@ -231,6 +194,65 @@ function filter(effect, duration) {
 	})
 }
 
+// // The nested try blocks will be simplified when Chrome 47 moves to Stable
+// function startRecording() {
+//   var options = {mimeType: 'video/webm'};
+//   recordedBlobs = [];
+//   try {
+//     mediaRecorder = new MediaRecorder(stream, options);
+//   } catch (e0) {
+//     console.log('Unable to create MediaRecorder with options Object: ', e0);
+//     try {
+//       options = {mimeType: 'video/webm,codecs=vp9'};
+//       mediaRecorder = new MediaRecorder(stream, options);
+//     } catch (e1) {
+//         alert('MediaRecorder is not supported by this browser.\n\n' +
+//             'Try Firefox 29 or later, or Chrome 47 or later, with Enable experimental Web Platform features enabled from chrome://flags.');
+//         return;
+
+//     }
+//   }
+//   console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+//   mediaRecorder.onstop = handleStop;
+//   mediaRecorder.ondataavailable = handleDataAvailable;
+//   mediaRecorder.start(100); // collect 100ms of data
+//   console.log('MediaRecorder started', mediaRecorder);
+// }
+
+// function stopRecording() {
+//   mediaRecorder.stop();
+//   console.log('Recorded Blobs: ', recordedBlobs);
+// }
+
+
+// function download() {
+//   var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+//   var url = window.URL.createObjectURL(blob);
+//   var a = document.createElement('a');
+//   a.style.display = 'none';
+//   a.href = url;
+//   a.download = 'star-plus.webm';
+//   document.body.appendChild(a);
+//   a.click();
+//   setTimeout(function() {
+//     document.body.removeChild(a);
+//     window.URL.revokeObjectURL(url);
+//   }, 100);
+// }
+
+// var stream = canvas.captureStream(); // frames per second
+// console.log('Started stream capture from canvas element: ', stream);
+
+
+// function handleDataAvailable(event) {
+//   if (event.data && event.data.size > 0) {
+//     recordedBlobs.push(event.data);
+//   }
+// }
+
+// function handleStop(event) {
+//   console.log('Recorder stopped: ', event);
+// }
 
 
 </script>
