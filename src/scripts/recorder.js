@@ -1,4 +1,4 @@
-
+/*globals MediaRecorder */
 class Recorder {
 
 	constructor(stream) {
@@ -34,7 +34,7 @@ class Recorder {
 			if (event.data && event.data.size > 0) {
 				this.recordedBlobs.push(event.data);
 			}
-		}
+		};
 
 		this.mediaRecorder.ondataavailable = handleDataAvailable;
 
@@ -48,17 +48,17 @@ class Recorder {
 
 	download() {
 		const blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
-  	const url = window.URL.createObjectURL(blob);
-  	const a = document.createElement('a');
-  	a.style.display = 'none';
-  	a.href = url;
-  	a.download = 'star-plus.webm';
-  	document.body.appendChild(a);
+		const url = window.URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = url;
+		a.download = 'star-plus.webm';
+		document.body.appendChild(a);
 		a.click();
-	  setTimeout(function() {
-	    document.body.removeChild(a);
-	    window.URL.revokeObjectURL(url);
-	  }, 100);
+		setTimeout(function() {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 100);
 	}
 
 }

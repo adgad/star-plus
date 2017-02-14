@@ -7,9 +7,9 @@ export default function(el, onLoadFn) {
 
 			img.onload = function(){
 				onLoadFn(img);
-			}
+			};
 			img.src = event.target.result;
-		}
+		};
 		reader.readAsDataURL(e.target.files[0]);   
 	}, false);
 }

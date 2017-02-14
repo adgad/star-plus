@@ -82,7 +82,7 @@ class StarPlusCanvas {
 			.then(() => {
 				this.filter('hue-rotate(120deg)', 400);
 				return this.zoom(zConf[9]);
-			})
+			});
 	}
 
 	stop() {
@@ -128,8 +128,8 @@ class StarPlusCanvas {
 				this.ctx.filter = 'none';
 				this.drawImage();
 				return resolve();
-			}, duration)
-		})
+			}, duration);
+		});
 	}
 }
 
