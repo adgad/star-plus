@@ -31,6 +31,10 @@ class StarPlusCanvas {
 		this.ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height, 0, 0, this.canvas.width, this.canvas.height);
 	}
 
+	get stream() {
+		return this.canvas.captureStream();
+	}
+
 	padFocalPoints() {
 		if(this.focalPoints.length < 10) {
 			for(var i = this.focalPoints.length; i<10; i++) {
