@@ -166,6 +166,10 @@ function start(img) {
   .then(function() {
 	  return zoom(zConf[8]);
   })
+  .then(function() {
+  	filter('hue-rotate(120deg)', 400);
+	  return zoom(zConf[9]);
+  })
   .then(stop)
 }
 
