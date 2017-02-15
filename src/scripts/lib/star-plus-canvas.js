@@ -12,7 +12,7 @@ class StarPlusCanvas {
 	init(img) {
 		this.focalPoints = [];
 		this.isPlaying = false;
-		this.canvas.width = Math.min(window.innerWidth, 600);
+		this.canvas.width = window.innerWidth - 20;
 		this.canvas.height = this.canvas.width / img.width * img.height;
  
 		this.img = img;
