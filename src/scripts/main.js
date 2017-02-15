@@ -5,6 +5,7 @@ import imageLoader from './lib/image-loader';
 
 const init = () => {
 
+	const mainEl = document.body;
 	const canvasEl = document.getElementById('c');
 	const imageLoaderEl =  document.getElementById('imageLoader');
 	const startBtn = document.getElementById('start');
@@ -15,9 +16,17 @@ const init = () => {
 	const audioPlayer = new AudioPlayer();
 	const recorder = new Recorder(spCanvas.stream, audioPlayer);
 
-	imageLoader(imageLoaderEl, spCanvas.init.bind(spCanvas));
+	imageLoader(imageLoaderEl, (img) => {
+		mainEl.classList.remove('done');
+		mainEl.classList.remove('playing');
+		mainEl.classList.add('image-loaded');
+		spCanvas.init(img);
+	});
 
 	const stop = () => {
+		mainEl.classList.remove('image-loaded');
+		mainEl.classList.remove('playing');
+		mainEl.classList.add('done');
 		spCanvas.stop();
 		audioPlayer.stop();
 		recorder.stop();
@@ -25,6 +34,9 @@ const init = () => {
 	};
 	
 	startBtn.addEventListener('click', () => {
+		mainEl.classList.remove('image-loaded');
+		mainEl.classList.remove('done');
+		mainEl.classList.add('playing');
 		spCanvas.start().then(stop);
 		audioPlayer.start();
 		recorder.start();
@@ -43,7 +55,7 @@ const init = () => {
 const registerWorker = () => {
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker
-			.register('/star-plus/worker.js', { scope: '/star-plus/'});
+			.register('/star-plus/worker.js');
 	}
 };
 

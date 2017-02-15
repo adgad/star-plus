@@ -3,72 +3,192 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	 <meta name="viewport" content="width=device-width">
-	  <meta name="theme-color" content="#2196f3"/>
+	<meta name="viewport" content="width=device-width">
+	<meta name="theme-color" content="#ff4d4d"/>
 	<title>SnapStar</title>
 	<link rel="manifest" href="manifest.json"/>
 	<link rel="icon" href="images/icons/favicon.ico"  type="image/x-icon" />
 	<style>
 		body {
-			font-family: Helvetica, Arial, sans-serif;
-			background-color: #efefef;
+			font-family: "Helvetica Neue", Arial, sans-serif;
+			font-weight: 200;
+			font-size: 14px;
+			background-color: #fcfcfc;
+			margin: 0;
+			padding: 0;
 		}
+
+		h1 {
+			background-color: #ff4d4d;
+			padding: 10px 14px;
+			margin: 0;
+			text-align: center;
+			font-size: 22px;
+			font-weight: 200;
+			box-shadow: 0 1px 6px 0px #666
+		}
+
+		.instructions,
+		.main {
+			padding: 10px;
+		}
+
+		.instructions {
+			font-size: 20px;
+			text-align: center;
+			list-style-position:inside;
+		}
+
+		.instructions li {
+			margin: 8px 0;
+		}
+
+		.main {
+			margin-bottom: 80px;
+		}
+
+		.done .main {
+			margin-bottom: 200px;
+		}
+
+		.image-loaded .instructions,
+		.playing .instructions,
+		.done .instructions {
+			display: none;
+		}
+
 		#c {
 			display: block;
-	    image-rendering: optimizeQuality;
-	    image-rendering: -moz-crisp-edges;
-	    image-rendering: -webkit-optimize-contrast;
-	    image-rendering: optimize-contrast;
-	    -ms-interpolation-mode: nearest-neighbor;
+			image-rendering: optimizeQuality;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: optimize-contrast;
+			-ms-interpolation-mode: nearest-neighbor;
 		}
 
-		#imageLoader,
-		button {
-	    font-family: inherit;
-	    font-size: 100%;
-	    padding: .5em 1em;
-	    color: #444;
-	    color: rgba(0,0,0,.8);
-	    border: 1px solid #999;
-	    background-color: #E6E6E6;
-	    text-decoration: none;
-	    border-radius: 2px;
-	    margin-bottom: 8px;
+		.controls {
+			position: fixed;
+			background: #fefefe;
+			bottom: 0;
+			border-top: 1px solid #efefef;
+			width: 100%;
 		}
-		button:hover {
-			background-color: #fecd5d;
+		.btn {
+			display: block;
+			padding: 20px;
+	    text-align: center;
+	    font-weight: bold;
+	    background: none;
+	    border: none;
+	    width: 100%;
+	    font-size: 16px;
+	    text-transform: uppercase;
+		}
+		.btn-file:before {
+			content: '⇪';
+			display: inline-block;
+			font-size: 18px;
+			margin-right: 8px;
+		}
+		#start:before {
+			content: '▶︎';
+			display: inline-block;
+			font-size: 18px;
+			margin-right: 8px;
+		}
+		#stop:before {
+			content: '◼︎';
+			display: inline-block;
+			font-size: 20px;
+			margin-right: 8px;
+		}
+		#download:before {
+			content: '⬇';
+			display: inline-block;
+			font-size: 18px;
+			margin-right: 8px;
+		}
+		.btn:focus {
+			outline: none;
+			background: #efefef;
+		}
+		.btn:hover {
+			background-color: #ff4d4d;
+			cursor:pointer;
+		}
+		.btn:active {
+			border-color: #ff4d4d;;
+		}
+		.btn-file input[type=file] {
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-width: 100%;
+			min-height: 100%;
+			font-size: 100px;
+			text-align: right;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			outline: none;
+			background: white;
+			cursor: inherit;
+			display: block;
 		}
 
+
+
+		#start,
+		#stop,
 		#download {
 			display: none;
 		}
-		#download.show {
-			display: block;
-		}
-		</style>
+
+		.image-loaded #start { display: block; }
+		.image-loaded #stop { display: none; }
+		.image-loaded #upload { display: none; }
+		.image-loaded #download { display: none; }
+
+		.playing #start { display: none; }
+		.playing #stop { display: block; }
+		.playing #upload { display: none; }
+		.playing #download { display: none; }
+		
+		.done #start { display: block; }
+		.done #stop { display: none; }
+		.done #upload { display: block; }
+		.done #download { display: block; }
+	</style>
 </head>
 <body>
-<h1>SnapStar</h1>
-<p>Turn any photo into an overly dramatic scene from a South Asian TV show</p>
-<ol>
-<li>Upload a file</li>
-<li>Click on the faces</li>
-<li>Start</li>
-</ol>
-<input type="file" id="imageLoader" name="imageLoader" accept="image/*" label="Upload an image"/>
-
-<button id="start">Start</button>
-<button id="stop">Stop</button>
-<button id="download">Download</button>
-<canvas id="c"></canvas>
-
-    <video id="recorded" autoplay loop></video>
-    <audio src="dramatic.mp3"></video>
-<script src="build/js/main.min.js"/>
-<script>
+	<h1>SnapStar</h1>
 
 
+	<section class="main">
+		
+		<canvas id="c"></canvas>
+		<audio src="dramatic.mp3"></audio>
 
-</script>
+	</section>
+
+	<section class="instructions">
+		<p>Turn any photo into an <a href="https://www.youtube.com/watch?v=YP2UjRRG--I">overly dramatic scene</a> from a South Asian TV show</p>
+		<ol>
+			<li>Upload a file</li>
+			<li>Click on the faces</li>
+			<li>Play</li>
+		</ol>
+	</section>
+
+	<section class="controls">
+		<label id="upload" class="btn btn-default btn-file">
+			<span>UPLOAD IMAGE</span><input id="imageLoader" type="file" name="imageLoader" style="display: none;" accept="image/*">
+		</label>
+
+		<button class="btn" id="start">Play</button>
+		<button class="btn" id="stop">Stop</button>
+		<button class="btn" id="download">Download</button>
+	</section>
+	<script defer async src="build/js/main.min.js"></script>
+
 </body>
 </html>
