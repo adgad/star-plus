@@ -1,5 +1,5 @@
 /* globals FaceDetector */
-import getOffset from './utils/get-offset';
+import getOffset from '../utils/get-offset';
 
 class StarPlusCanvas {
 

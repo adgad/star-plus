@@ -1,7 +1,7 @@
-import StarPlusCanvas from './star-plus-canvas';
-import AudioPlayer from './audio-player';
-import Recorder from './recorder';
-import imageLoader from './image-loader';
+import StarPlusCanvas from './lib/star-plus-canvas';
+import AudioPlayer from './lib/audio-player';
+import Recorder from './lib/recorder';
+import imageLoader from './lib/image-loader';
 
 const init = () => {
 
@@ -39,4 +39,13 @@ const init = () => {
 	});
 };
 
+
+const registerWorker = () => {
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker
+			.register('/worker.js');
+	}
+};
+
 init();
+registerWorker();
