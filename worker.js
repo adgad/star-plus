@@ -1,9 +1,9 @@
-var cacheName = 'str-plus-filter';
+var cacheName = 'star-plus-filter';
 var filesToCache = [
-	'/',
-	'/index.html',
-	'/dramatic.mp3',
-	'/build/js/main.min.js'
+	'/star-plus',
+	'/star-plus/index.html',
+	'/star-plus/dramatic.mp3',
+	'/star-plus/build/js/main.min.js'
 ];
 
 self.addEventListener('install', function(e) {
