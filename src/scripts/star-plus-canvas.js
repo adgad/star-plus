@@ -35,7 +35,7 @@ class StarPlusCanvas {
 	}
 
 	get stream() {
-		return this.canvas.captureStream();
+		return typeof this.canvas.captureStream !== 'undefined' ? this.canvas.captureStream() : null;
 	}
 
 	padFocalPoints() {

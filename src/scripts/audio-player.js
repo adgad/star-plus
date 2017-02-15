@@ -4,8 +4,11 @@ class AudioPlayer {
 	constructor() {
 		this.audio = new Audio();
 		this.audio.src = 'dramatic.mp3';
-		this.ctx = new AudioContext();
-		this.audio.oncanplay = this.setUpStream.bind(this);
+		if(typeof AudioContext === 'function') {
+
+			this.ctx = new AudioContext();
+			this.audio.oncanplay = this.setUpStream.bind(this);
+		}
 		this.stream = null;
 	}
 

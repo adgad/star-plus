@@ -13,7 +13,9 @@ class Recorder {
 	start() {
 		//reset the recorded blobs
 		this.recordedBlobs = [];
-		this.stream.addTrack(this.audioPlayer.track);
+		if(this.stream && this.stream.addTrack) {
+			this.stream.addTrack(this.audioPlayer.track);
+		}
 
 
 		try {
@@ -40,7 +42,9 @@ class Recorder {
 	}
 
 	stop() {
-		this.mediaRecorder.stop();
+		if(this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+			this.mediaRecorder.stop();
+		}
 	}
 
 	download() {
