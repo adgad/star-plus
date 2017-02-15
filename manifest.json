@@ -2,8 +2,7 @@
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
   "display": "standalone",
-  "scope": "/star-plus",
-  "start_url": "/star-plus",
+  "start_url": "./",
   "name": "SnapStar",
   "short_name": "SnapStar",
   "icons": [
