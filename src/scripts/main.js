@@ -43,7 +43,7 @@ const init = () => {
 const registerWorker = () => {
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker
-			.register('/star-plus/worker.js');
+			.register('/star-plus/worker.js', { scope: '/star-plus/'});
 	}
 };
 

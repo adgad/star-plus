@@ -1,9 +1,11 @@
 {
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
-  "display": "browser",
-  "Scope": "/",
+  "display": "standalone",
+  "scope": "/",
   "start_url": "/",
+  "name": "SnapStar",
+  "short_name": "SnapStar",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",

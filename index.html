@@ -4,8 +4,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width">
+	  <meta name="theme-color" content="#2196f3"/>
 	<title>SnapStar</title>
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="manifest.json"/>
+	<link rel="icon" href="images/icons/favicon.ico"  type="image/x-icon" />
 	<style>
 		body {
 			font-family: Helvetica, Arial, sans-serif;
@@ -19,9 +21,7 @@
 	    image-rendering: optimize-contrast;
 	    -ms-interpolation-mode: nearest-neighbor;
 		}
-		#z {
-			width: 100%;
-		}
+
 		#imageLoader,
 		button {
 	    font-family: inherit;
@@ -30,7 +30,6 @@
 	    color: #444;
 	    color: rgba(0,0,0,.8);
 	    border: 1px solid #999;
-	    border: transparent;
 	    background-color: #E6E6E6;
 	    text-decoration: none;
 	    border-radius: 2px;
@@ -56,7 +55,7 @@
 <li>Click on the faces</li>
 <li>Start</li>
 </ol>
-<input type="file" id="imageLoader" name="imageLoader" accept="image/*"/>
+<input type="file" id="imageLoader" name="imageLoader" accept="image/*" label="Upload an image"/>
 
 <button id="start">Start</button>
 <button id="stop">Stop</button>
