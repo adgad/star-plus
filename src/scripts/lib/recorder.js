@@ -53,7 +53,7 @@ class Recorder {
 		const a = document.createElement('a');
 		a.style.display = 'none';
 		a.href = url;
-		a.download = 'star-plus.webm';
+		a.download = 'star-plus-' + new Date().getTime() + '.webm';
 		document.body.appendChild(a);
 		a.click();
 		setTimeout(function() {
