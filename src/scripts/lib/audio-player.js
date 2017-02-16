@@ -3,7 +3,8 @@ class AudioPlayer {
 
 	constructor() {
 		this.audio = new Audio();
-		this.audio.src = 'dramatic.mp3';
+		this.srcset = ['dramatic.mp3', 'dramatic2.mp3', 'dramatic3.ogg'];
+
 		if(typeof AudioContext === 'function') {
 
 			this.ctx = new AudioContext();
@@ -20,9 +21,7 @@ class AudioPlayer {
 		const sourceNode = this.ctx.createMediaElementSource(this.audio);
 		sourceNode.connect(this.ctx.destination);
 		sourceNode.connect(dest);
-
 		this.audio.oncanplay = null;
-
 	}
 
 	get track() {
@@ -30,7 +29,13 @@ class AudioPlayer {
 	}
 
 	start() {
+		this.audio.src = this.srcset[Math.floor(Math.random() * 2)];
+		this.audio.loop = true;
 		this.audio.play();
+		return new Promise((resolve) => {
+			this.audio.addEventListener('canplay', resolve);
+		});
+
 	}
 
 	stop() {

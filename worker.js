@@ -3,6 +3,8 @@ var filesToCache = [
 	'/star-plus',
 	'/star-plus/index.html',
 	'/star-plus/dramatic.mp3',
+	'/star-plus/dramatic2.mp3',
+	'/star-plus/dramatic3.ogg',
 	'/star-plus/build/js/main.min.js'
 ];
 

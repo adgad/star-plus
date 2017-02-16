@@ -64,7 +64,7 @@ class StarPlusCanvas {
 			.then(() => this.zoom(zConf[1]))
 			.then(() => {
 				this.filter('hue-rotate(50deg)', 400);
-				return this.zoom(zConf[2]);
+				return this.shake(zConf[2]);
 			})
 			.then(() => {
 				this.filter('hue-rotate(-50deg)', 400);
@@ -75,7 +75,7 @@ class StarPlusCanvas {
 				this.filter('invert(100%)', 300);
 				return this.zoom(zConf[5]);
 			})
-			.then(() => this.zoom(zConf[6]))
+			.then(() => this.shake(zConf[6]))
 			.then(() => {
 				this.filter('brightness(1.2)', 400);
 				return this.zoom(zConf[7]);
@@ -118,6 +118,33 @@ class StarPlusCanvas {
 		};
 
 		return Promise.resolve(doZoom());
+		
+	}
+
+	shake (opts, iterations) {
+		this.ctx.save();
+		iterations = iterations || 0;
+		var doShake = () => {
+			if(!this.isPlaying) return;
+			return new Promise((resolve) => {
+				if(iterations++ < opts.maxIterations) {
+					var dx = Math.random()*10 - 5;
+					var dy = Math.random()*10 - 5;
+					this.ctx.translate(dx, dy);
+					this.drawImage();
+				} else {
+					this.ctx.restore();
+					return resolve();
+				}
+				
+				
+				requestAnimationFrame(() => {
+					resolve(doShake(opts, iterations));
+				});
+			});
+		};
+
+		return Promise.resolve(doShake());
 		
 	}
 

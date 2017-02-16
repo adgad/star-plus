@@ -38,8 +38,7 @@ const init = () => {
 		mainEl.classList.remove('done');
 		mainEl.classList.add('playing');
 		spCanvas.start().then(stop);
-		audioPlayer.start();
-		recorder.start();
+		audioPlayer.start().then(recorder.start.bind(recorder));
 		downloadBtn.classList.remove('show');
 	});
 
