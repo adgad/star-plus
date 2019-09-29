@@ -22,7 +22,7 @@ class Recorder {
 			var mixedStream = 'MediaStream' in window ? 
 			new MediaStream([this.stream.getVideoTracks()[0], this.audioPlayer.track]) :
 			this.stream;
-			this.mediaRecorder = new MediaRecorder(mixedStream, { mimeType: 'video/webm;codecs=h264' });
+			this.mediaRecorder = new MediaRecorder(mixedStream, { mimeType: 'video/webm;codecs="vp8"' });
 		} catch (e) {
 			console.log('MediaRecorder is not supported by this browser', e);
 			return;
@@ -48,12 +48,12 @@ class Recorder {
 	}
 
 	download() {
-		const blob = new Blob(this.recordedBlobs, { type: 'video/mp4' });
+		const blob = new Blob(this.recordedBlobs, { type: 'video/webm' });
 		const url = window.URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.style.display = 'none';
 		a.href = url;
-		a.download = 'star-plus-' + new Date().getTime() + '.mp4';
+		a.download = 'star-plus-' + new Date().getTime() + '.webm';
 		document.body.appendChild(a);
 		a.click();
 		window.URL.revokeObjectURL(url);
