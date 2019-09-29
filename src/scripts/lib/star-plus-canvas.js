@@ -12,8 +12,13 @@ class StarPlusCanvas {
 	init(img) {
 		this.focalPoints = [];
 		this.isPlaying = false;
-		this.canvas.width = window.innerWidth - 20;
-		this.canvas.height = this.canvas.width / img.width * img.height;
+		if(img.height > window.innerHeight) {
+			this.canvas.height = window.innerHeight - 20;
+			this.canvas.width = this.canvas.height / img.width * img.height;
+		} else {
+			this.canvas.width = window.innerWidth - 20;
+			this.canvas.height = this.canvas.width / img.width * img.height;
+		}
  
 		this.img = img;
 		img.style.display = 'none';

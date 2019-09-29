@@ -3,10 +3,12 @@ import eslint from 'rollup-plugin-eslint';
 import babel from 'rollup-plugin-babel';
 
 export default {
-  entry: 'src/scripts/main.js',
-  dest: 'build/js/main.min.js',
-  format: 'iife',
-  sourceMap: true,
+	input: 'src/scripts/main.js',
+	output: {
+		file: 'build/js/main.min.js',
+		format: 'cjs',
+		sourceMap: true,
+	},
 	plugins: [
 		eslint({
 			exclude: [
@@ -14,7 +16,7 @@ export default {
 			]
 		}),
 		babel({
-      exclude: 'node_modules/**'
-    })
+			exclude: 'node_modules/**'
+		})
 	]
-}
+};

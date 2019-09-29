@@ -13,8 +13,7 @@ const init = () => {
 	const downloadBtn = document.getElementById('download');
 
 	const spCanvas = new StarPlusCanvas(canvasEl);
-	const audioPlayer = new AudioPlayer();
-	const recorder = new Recorder(spCanvas.stream, audioPlayer);
+	let audioPlayer, recorder;
 
 	imageLoader(imageLoaderEl, (img) => {
 		mainEl.classList.remove('done');
@@ -28,17 +27,19 @@ const init = () => {
 		mainEl.classList.remove('playing');
 		mainEl.classList.add('done');
 		spCanvas.stop();
-		audioPlayer.stop();
-		recorder.stop();
+		audioPlayer && audioPlayer.stop();
+		recorder && recorder.stop();
 		downloadBtn.classList.add('show');
 	};
 	
 	startBtn.addEventListener('click', () => {
+		audioPlayer = new AudioPlayer();
+		recorder = new Recorder(spCanvas.stream, audioPlayer);
+		audioPlayer.start().then(recorder.start.bind(recorder));
 		mainEl.classList.remove('image-loaded');
 		mainEl.classList.remove('done');
 		mainEl.classList.add('playing');
 		spCanvas.start().then(stop);
-		audioPlayer.start().then(recorder.start.bind(recorder));
 		downloadBtn.classList.remove('show');
 	});
 
