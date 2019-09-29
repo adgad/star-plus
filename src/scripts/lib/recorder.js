@@ -48,7 +48,7 @@ class Recorder {
 	}
 
 	download() {
-		const blob = new Blob(this.recordedBlobs);
+		const blob = new Blob(this.recordedBlobs, { type: 'video/mp4' });
 		const url = window.URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.style.display = 'none';
