@@ -56,10 +56,7 @@ class Recorder {
 		a.download = 'star-plus-' + new Date().getTime() + '.mp4';
 		document.body.appendChild(a);
 		a.click();
-		setTimeout(function() {
-			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);
-		}, 100);
+		window.URL.revokeObjectURL(url);
 	}
 
 }
