@@ -22,7 +22,20 @@ class Recorder {
 			var mixedStream = 'MediaStream' in window ? 
 			new MediaStream([this.stream.getVideoTracks()[0], this.audioPlayer.track]) :
 			this.stream;
-			this.mediaRecorder = new MediaRecorder(mixedStream, { mimeType: 'video/webm;codecs="vp8"' });
+			let options = {mimeType: 'video/webm;codecs=vp9'};
+			if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+				console.error(`${options.mimeType} is not Supported`);
+				options = {mimeType: 'video/webm;codecs=vp8'};
+				if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+					console.error(`${options.mimeType} is not Supported`);
+					options = {mimeType: 'video/webm'};
+					if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+						console.error(`${options.mimeType} is not Supported`);
+						options = {mimeType: ''};
+					}
+				}
+			}
+			this.mediaRecorder = new MediaRecorder(mixedStream, options);
 		} catch (e) {
 			console.log('MediaRecorder is not supported by this browser', e);
 			return;
@@ -38,7 +51,7 @@ class Recorder {
 		this.mediaRecorder.ondataavailable = handleDataAvailable;
 
 		//start recording
-		this.mediaRecorder.start(100);
+		this.mediaRecorder.start(10);
 	}
 
 	stop() {
@@ -56,7 +69,10 @@ class Recorder {
 		a.download = 'star-plus-' + new Date().getTime() + '.webm';
 		document.body.appendChild(a);
 		a.click();
-		window.URL.revokeObjectURL(url);
+		setTimeout(() => {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 100);
 	}
 
 }
